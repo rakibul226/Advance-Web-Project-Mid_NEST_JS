@@ -6,7 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
-import { AddResidentDTO } from './resident.dto';
+import { AddResidentDTO } from './DTO/resident.dto';
 
 @Controller('resident')
 export class residentController {

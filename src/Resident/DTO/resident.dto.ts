@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class AddResidentDTO {
   @IsNotEmpty()
@@ -10,7 +10,4 @@ export class AddResidentDTO {
 
   @IsOptional()
   status: string;
-
 }
-
-

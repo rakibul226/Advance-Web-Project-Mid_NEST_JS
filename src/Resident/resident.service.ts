@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResidentEntity } from './resident.entity';
-import { MoreThan, Repository } from 'typeorm';
-import { AddResidentDTO } from './resident.dto';
-import { NotFoundException } from '@nestjs/common';
+import { ResidentEntity } from './ENTITY/resident.entity';
+import { AddResidentDTO } from './DTO/resident.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ResidentService {
