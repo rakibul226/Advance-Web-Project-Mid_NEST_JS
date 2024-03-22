@@ -10,8 +10,15 @@ import { ResidentEntity } from "src/Resident/ENTITY/resident.entity";
 export class AdminController{
     constructor(private readonly adminService: AdminService){}
 
+    // get all users
     @Get('/getallusers')
     getAllUsers(): Promise<ResidentEntity[]> {
         return this.adminService.getAllUsers()
+    }
+
+    // get user by email
+    @Get('getuser/:email')
+    getUserByEmail(@Param('email') email: string): object {
+        return this.adminService.getUserByEmail(email);
     }
 }

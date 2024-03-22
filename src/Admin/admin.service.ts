@@ -17,8 +17,14 @@ export class AdminService {
         private residentRepo: Repository<ResidentEntity>,
     ){}
 
+    // get all users
     async getAllUsers(): Promise<ResidentEntity[]> {
         return this.residentRepo.find();
+    }
+
+    // get user by email
+    async getUserByEmail(email: string): Promise<ResidentEntity> {
+        return this.residentRepo.findOneBy({ email: email });
     }
 
 }
