@@ -4,10 +4,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './Admin/admin.module';
+import { ProductmanagerModule } from './product_manager/Productmanager.module';
 
 @Module({
   imports: [
-    ResidentModule, AdminModule, // import your userModule  here
+    ResidentModule, AdminModule,ProductmanagerModule, // import your userModule  here
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
