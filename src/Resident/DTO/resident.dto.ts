@@ -7,6 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 
+// ------------------------------------registration DTO
 export class registrationDTO {
   @IsNotEmpty()
   name: string;
@@ -29,4 +30,15 @@ export class registrationDTO {
   @IsString()
   @IsIn(['admin', 'resident', 'librarian', 'manager'])
   role: string;
+}
+
+// ------------------------------------Login DTO
+export class LoginDTO {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 }

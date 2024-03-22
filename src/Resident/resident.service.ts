@@ -11,7 +11,7 @@ export class ResidentService {
     private residentRepo: Repository<ResidentEntity>,
   ) {}
 
-  //user registration
+  //--------------------------------user registration
   async registration(
     registrationDTO: registrationDTO,
   ): Promise<ResidentEntity[]> {
@@ -23,5 +23,12 @@ export class ResidentService {
     newUser.role = registrationDTO.role;
     const res = await this.residentRepo.save(newUser);
     return [res];
+  }
+
+  async login(email: string, password: string): Promise<ResidentEntity | null> {
+    const user = await this.residentRepo.findOne({
+      where: { email, password },
+    });
+    return user || null;
   }
 }
