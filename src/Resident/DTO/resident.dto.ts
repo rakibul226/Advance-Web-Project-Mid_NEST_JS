@@ -1,13 +1,32 @@
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsEmail,
+  IsIn,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
 
-export class AddResidentDTO {
+export class registrationDTO {
   @IsNotEmpty()
-  fullName: string;
+  name: string;
 
   @IsNotEmpty()
-  @IsInt()
-  age: number;
+  @IsEmail({}, { message: 'Invalid email format' })
+  email: string;
 
-  @IsOptional()
-  status: string;
+  @IsNotEmpty()
+  @MinLength(4, { message: 'Password must be at least 4 characters long' })
+  // @Matches(/(?=.*[A-Z])/, {
+  // message: 'Password must contain at least one uppercase letter',
+  // })
+  password: string;
+
+  @Matches(/^[0-9]+$/, { message: 'Phone number must contain only numbers' })
+  phone: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsIn(['admin', 'resident', 'librarian', 'manager'])
+  role: string;
 }

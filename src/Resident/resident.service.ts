@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResidentEntity } from './ENTITY/resident.entity';
-import { AddResidentDTO } from './DTO/resident.dto';
+import { registrationDTO } from './DTO/resident.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -11,13 +11,17 @@ export class ResidentService {
     private residentRepo: Repository<ResidentEntity>,
   ) {}
 
-  //create new user
-  async addResident(addResidentDTO: AddResidentDTO): Promise<ResidentEntity[]> {
-    const newResident = new ResidentEntity();
-    newResident.fullName = addResidentDTO.fullName;
-    newResident.age = addResidentDTO.age;
-    newResident.status = addResidentDTO.status;
-    const res = await this.residentRepo.save(newResident);
+  //user registration
+  async registration(
+    registrationDTO: registrationDTO,
+  ): Promise<ResidentEntity[]> {
+    const newUser = new ResidentEntity();
+    newUser.name = registrationDTO.name;
+    newUser.email = registrationDTO.email;
+    newUser.password = registrationDTO.password;
+    newUser.phone = registrationDTO.phone;
+    newUser.role = registrationDTO.role;
+    const res = await this.residentRepo.save(newUser);
     return [res];
   }
 }

@@ -6,16 +6,17 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
-import { AddResidentDTO } from './DTO/resident.dto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { registrationDTO } from './DTO/resident.dto';
 
-@Controller('resident')
+@Controller('user')
 export class residentController {
   constructor(private readonly residentService: ResidentService) {}
 
   //create new user
-  @Post('/createuser')
+  @Post('/registration')
   @UsePipes(ValidationPipe)
-  addResident(@Body() addResidentDTO: AddResidentDTO): any {
-    return this.residentService.addResident(addResidentDTO);
+  registration(@Body() registrationDTO: registrationDTO): any {
+    return this.residentService.registration(registrationDTO);
   }
 }

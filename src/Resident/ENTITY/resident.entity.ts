@@ -1,15 +1,22 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('resident')
+@Entity('user')
 export class ResidentEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
   @Column()
-  fullName: string;
+  name: string;
 
-  @Column({ unsigned: true })
-  age: number;
-  @Column({ default: 'active', enum: ['active', 'inactive'] })
-  status: string;
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
+  role: string;
 }
