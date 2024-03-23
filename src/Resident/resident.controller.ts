@@ -8,7 +8,8 @@ import {
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { LoginDTO, registrationDTO } from './DTO/resident.dto';
+import { BuyBookDTO, LoginDTO, registrationDTO } from './DTO/resident.dto';
+import { BookEntity } from './ENTITY/resident.entity';
 
 @Controller('user')
 export class residentController {
@@ -31,5 +32,10 @@ export class residentController {
     }
 
     return { message: 'Login successful' };
+  }
+
+  @Post('/buy-book')
+  async buyBook(@Body() buyBookDTO: BuyBookDTO): Promise<BookEntity> {
+    return this.residentService.buyBook(buyBookDTO.bookName);
   }
 }

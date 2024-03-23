@@ -42,3 +42,9 @@ export class LoginDTO {
   @IsString()
   password: string;
 }
+// -------------------------------------BuyBook DTO
+export class BuyBookDTO {
+  @IsNotEmpty()
+  @IsString()
+  bookName: string;
+}

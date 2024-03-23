@@ -5,14 +5,17 @@ export class RegistrationEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
   password: string;
+
+  @Column()
+  phone: string;
 
   @Column()
   role: string;

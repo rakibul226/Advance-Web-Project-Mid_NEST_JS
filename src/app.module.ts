@@ -7,10 +7,15 @@ import { AdminModule } from './Admin/admin.module';
 import { ProductmanagerModule } from './product_manager/Productmanager.module';
 import { LibraryModule } from './librarymanager/library/library.module';
 import { BookModule } from './librarymanager/Book_Manager/book.module';
+// import { LibraryModule } from './librarymanager/library/library.module';
+// import { BookModule } from './librarymanager/Book_Manager/book.module';
 
 @Module({
   imports: [
-    ResidentModule, AdminModule,ProductmanagerModule,LibraryModule,// import your userModule  here
+    ResidentModule,
+    AdminModule,
+    ProductmanagerModule,
+    LibraryModule, // import your userModule  here
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -21,7 +26,7 @@ import { BookModule } from './librarymanager/Book_Manager/book.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    BookModule
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],

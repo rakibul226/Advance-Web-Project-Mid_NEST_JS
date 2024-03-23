@@ -5,10 +5,10 @@ export class ResidentEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
@@ -19,4 +19,46 @@ export class ResidentEntity {
 
   @Column()
   role: string;
+}
+
+@Entity('all_book')
+export class BookEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  author: string;
+
+  @Column()
+  category: string;
+
+  @Column()
+  price: number;
+
+  @Column()
+  quantity: number;
+}
+
+@Entity('myBook')
+export class MyBookEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  author: string;
+
+  @Column()
+  category: string;
+
+  @Column()
+  price: number;
+
+  @Column()
+  quantity: number;
 }
