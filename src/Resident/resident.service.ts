@@ -33,6 +33,7 @@ export class ResidentService {
     return [res];
   }
 
+  //--------------------------------user registration
   async login(email: string, password: string): Promise<ResidentEntity> {
     const user = await this.residentRepo.findOne({
       where: { email, password },
@@ -40,6 +41,7 @@ export class ResidentService {
     return user;
   }
 
+  //--------------------------------user registration
   async buyBook(bookName: string): Promise<BookEntity | null> {
     const book = await this.bookRepo.findOne({
       where: { name: bookName },
@@ -58,5 +60,16 @@ export class ResidentService {
     await this.myBookRepo.save(myBook);
 
     return book;
+  }
+
+  //--------------------------------user registration
+  async findByName(name: string): Promise<string> {
+    const book = await this.bookRepo.findOne({ where: { name } });
+
+    if (book) {
+      return `Book "${name}" found.`;
+    } else {
+      return `Book "${name}" is not available.`;
+    }
   }
 }

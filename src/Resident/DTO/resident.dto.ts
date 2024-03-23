@@ -48,3 +48,8 @@ export class BuyBookDTO {
   @IsString()
   bookName: string;
 }
+
+export class SearchDTO {
+  @IsString()
+  name: string;
+}
