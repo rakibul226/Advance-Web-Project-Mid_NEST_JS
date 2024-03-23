@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ResidentService } from './resident.service';
 import { residentController } from './resident.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ResidentEntity } from './ENTITY/resident.entity';
+import { BookEntity, ResidentEntity } from './ENTITY/resident.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ResidentEntity])],
+  imports: [TypeOrmModule.forFeature([ResidentEntity, BookEntity])],
   controllers: [residentController],
   providers: [ResidentService],
 })
