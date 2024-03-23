@@ -38,4 +38,10 @@ export class AdminController {
   updateUserRolebyID(@Param('id', ParseIntPipe) id: number, @Body() data: UserUpdateDTO): object {
     return this.adminService.updateUserRoleById(id, data);
   }
+
+  // get users by partial match(Search by name)
+  @Get('getusersbyname/:name')
+  getUsersByName(@Param('name') name: string){
+      return this.adminService.getUsersByName(name);
+  }
 }

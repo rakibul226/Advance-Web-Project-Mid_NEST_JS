@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResidentEntity } from 'src/Resident/ENTITY/resident.entity';
 import { UserUpdateDTO } from './admin.dto';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class AdminService {
@@ -39,5 +40,14 @@ export class AdminService {
   async updateUserRoleById(id: number, data: UserUpdateDTO): Promise<ResidentEntity> {
     await this.residentRepo.update(id, data);
     return this.residentRepo.findOneBy({ id });
-    }
+  }
+
+  // get users by partial match(Search by name)
+  getUsersByName(name:string): Promise<ResidentEntity[]>{
+    return this.residentRepo.find({
+        where: {
+            name: Like(`%${name}%`),
+        },
+    });
+}
 }
