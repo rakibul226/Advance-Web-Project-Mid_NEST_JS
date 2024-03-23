@@ -16,7 +16,7 @@ import {
   SearchDTO,
   registrationDTO,
 } from './DTO/resident.dto';
-import { BookEntity } from './ENTITY/resident.entity';
+import { BookEntity, MyBookEntity } from './ENTITY/resident.entity';
 
 @Controller('user')
 export class residentController {
@@ -56,7 +56,12 @@ export class residentController {
 
   //5.---------------------------------view all book
   @Get('/view-all-books')
-  async viewAllBooks(): Promise<BookEntity[]> {
-    return this.residentService.viewAllBooks();
+  async viewAllBooks(): Promise<BookEntity[] | string> {
+    return await this.residentService.viewAllBooks();
+  }
+
+  @Get('/view-myBook')
+  async viewMyBooks(): Promise<MyBookEntity[] | string> {
+    return await this.residentService.viewMyBooks();
   }
 }

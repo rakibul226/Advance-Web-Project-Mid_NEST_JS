@@ -73,8 +73,21 @@ export class ResidentService {
     }
   }
 
-  //--------------------------------View
-  async viewAllBooks(): Promise<BookEntity[]> {
-    return this.bookRepo.find();
+  //--------------------------------View All Book
+  async viewAllBooks(): Promise<BookEntity[] | string> {
+    const books = await this.bookRepo.find();
+    if (books.length === 0) {
+      return 'No Books Available';
+    }
+    return books;
+  }
+
+  //--------------------------------View My Book
+  async viewMyBooks(): Promise<MyBookEntity[] | string> {
+    const books = await this.myBookRepo.find();
+    if (books.length === 0) {
+      return "You haven't Purchased any book";
+    }
+    return books;
   }
 }
