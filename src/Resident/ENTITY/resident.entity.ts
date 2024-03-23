@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class ResidentEntity {
@@ -44,8 +44,8 @@ export class BookEntity {
 
 @Entity('myBook')
 export class MyBookEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  Product_ID: number;
 
   @Column()
   name: string;
@@ -58,7 +58,4 @@ export class MyBookEntity {
 
   @Column()
   price: number;
-
-  @Column()
-  quantity: number;
 }

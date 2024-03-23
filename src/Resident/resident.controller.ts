@@ -34,6 +34,7 @@ export class residentController {
     return { message: 'Login successful' };
   }
 
+  //---------------------------------buy book
   @Post('/buy-book')
   async buyBook(@Body() buyBookDTO: BuyBookDTO): Promise<BookEntity> {
     return this.residentService.buyBook(buyBookDTO.bookName);

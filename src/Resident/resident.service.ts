@@ -1,6 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BookEntity, ResidentEntity } from './ENTITY/resident.entity';
+import {
+  BookEntity,
+  MyBookEntity,
+  ResidentEntity,
+} from './ENTITY/resident.entity';
 import { registrationDTO } from './DTO/resident.dto';
 import { Repository } from 'typeorm';
 
@@ -11,6 +15,8 @@ export class ResidentService {
     private residentRepo: Repository<ResidentEntity>,
     @InjectRepository(BookEntity)
     private bookRepo: Repository<BookEntity>,
+    @InjectRepository(MyBookEntity)
+    private myBookRepo: Repository<MyBookEntity>,
   ) {}
 
   //--------------------------------user registration
@@ -42,8 +48,14 @@ export class ResidentService {
     if (!book) {
       throw new NotFoundException('Book not found');
     }
+    const myBook = new MyBookEntity();
+    myBook.Product_ID = book.id;
+    myBook.name = book.name;
+    myBook.author = book.author;
+    myBook.category = book.category;
+    myBook.price = book.price;
 
-    // You can add additional logic here, like inserting the book into another table
+    await this.myBookRepo.save(myBook);
 
     return book;
   }
