@@ -72,4 +72,9 @@ export class ResidentService {
       return `Book "${name}" is not available.`;
     }
   }
+
+  //--------------------------------View
+  async viewAllBooks(): Promise<BookEntity[]> {
+    return this.bookRepo.find();
+  }
 }

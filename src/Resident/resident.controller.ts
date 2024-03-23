@@ -22,14 +22,14 @@ import { BookEntity } from './ENTITY/resident.entity';
 export class residentController {
   constructor(private readonly residentService: ResidentService) {}
 
-  //---------------------------------user registration(create new user)
+  //1.---------------------------------user registration(create new user)
   @Post('/registration')
   @UsePipes(ValidationPipe)
   registration(@Body() registrationDTO: registrationDTO): any {
     return this.residentService.registration(registrationDTO);
   }
 
-  //---------------------------------login
+  //2.---------------------------------login
   @Post('login')
   async login(@Body() LoginDTO: LoginDTO) {
     const { email, password } = LoginDTO;
@@ -41,15 +41,22 @@ export class residentController {
     return { message: 'Login successful' };
   }
 
-  //---------------------------------buy book
+  //3---------------------------------buy book
   @Post('/buy-book')
   async buyBook(@Body() buyBookDTO: BuyBookDTO): Promise<BookEntity> {
     return this.residentService.buyBook(buyBookDTO.bookName);
   }
 
+  //4.---------------------------------buy book
   @Get('findbook/:name')
   @UsePipes(new ValidationPipe())
   async findBookByName(@Param() searchDTO: SearchDTO): Promise<string> {
     return this.residentService.findByName(searchDTO.name);
+  }
+
+  //5.---------------------------------view all book
+  @Get('/view-all-books')
+  async viewAllBooks(): Promise<BookEntity[]> {
+    return this.residentService.viewAllBooks();
   }
 }
