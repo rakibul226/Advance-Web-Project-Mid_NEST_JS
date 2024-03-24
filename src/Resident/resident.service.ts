@@ -44,7 +44,6 @@ export class ResidentService {
     newUser.email = registrationDTO.email;
     newUser.password = registrationDTO.password;
     newUser.phone = registrationDTO.phone;
-    newUser.role = registrationDTO.role;
     const res = await this.residentRepo.save(newUser);
     return [res];
   }

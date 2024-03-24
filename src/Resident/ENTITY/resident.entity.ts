@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('user')
+@Entity('resident')
 export class ResidentEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
@@ -17,9 +17,6 @@ export class ResidentEntity {
 
   @Column()
   phone: string;
-
-  @Column()
-  role: string;
 }
 
 //---------------------------------All book entity
