@@ -5,6 +5,7 @@ import { AdminRegistrationDTO, AdminEventAnnouncementDTO, UserUpdateDTO } from '
 import { registrationDTO } from 'src/Resident/DTO/resident.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
+import { AdminAnnouncedPostEntity } from './admin.entity';
 
 @Controller('/admin')
 export class AdminController {
@@ -79,5 +80,12 @@ export class AdminController {
     async addEvent(@Body() myobj: AdminEventAnnouncementDTO, @UploadedFile() myfile: Express.Multer.File): Promise<AdminEventAnnouncementDTO> {
         myobj.filename = myfile.filename;
         return this.adminService.addEvent(myobj);
+    }
+
+    // post comments
+    @Post('addpost/:adminid')
+    async addpost(@Param('adminid') adminid: string, @Body() myobj: AdminAnnouncedPostEntity,): Promise<AdminAnnouncedPostEntity> {
+
+        return this.adminService.addPost(adminid, myobj);
     }
 }

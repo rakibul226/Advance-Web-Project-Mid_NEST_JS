@@ -6,7 +6,7 @@ import { ResidentEntity } from 'src/Resident/ENTITY/resident.entity';
 import { AdminRegistrationDTO, UserUpdateDTO } from './admin.dto';
 import { Like } from 'typeorm';
 import { registrationDTO } from 'src/Resident/DTO/resident.dto';
-import { AdminAnnouncedEventEntity, AdminEntity } from './admin.entity';
+import { AdminAnnouncedEventEntity, AdminAnnouncedPostEntity, AdminEntity } from './admin.entity';
 
 @Injectable()
 export class AdminService {
@@ -17,6 +17,8 @@ export class AdminService {
     private residentRepo: Repository<ResidentEntity>,
     @InjectRepository(AdminEntity)
     private adminRegistrationRepo: Repository<AdminEntity>,
+    @InjectRepository(AdminAnnouncedPostEntity)
+    private adminAnnouncedPostRepo: Repository<AdminAnnouncedPostEntity>,
   ) {}
 
   async registration(
@@ -72,4 +74,11 @@ export class AdminService {
   async addEvent(myobj: AdminAnnouncedEventEntity): Promise<AdminAnnouncedEventEntity> {
     return await this.adminRepo.save(myobj);
   }
+
+  async addPost(adminId: string, post: AdminAnnouncedPostEntity): Promise<AdminAnnouncedPostEntity> {
+    console.log(adminId);
+    const admin = await this.adminRegistrationRepo.findOneBy({adminId: adminId});
+    post.admin = admin;
+    return this.adminAnnouncedPostRepo.save(post);
+}
 }

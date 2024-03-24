@@ -1,10 +1,10 @@
-import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn,} from "typeorm";
+import {Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn,} from "typeorm";
 
 
 @Entity('admin')
 export class AdminEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
-  id: number;
+  adminId: string;
 
   @Column({ nullable: false })
   name: string;
@@ -17,6 +17,9 @@ export class AdminEntity {
 
   @Column()
   phone: string;
+
+  @OneToMany(() => AdminAnnouncedPostEntity, post => post.admin, { cascade: true })
+  posts: AdminAnnouncedPostEntity[];
 }
 
 @Entity("adminAnnouncedEvent")
@@ -28,4 +31,17 @@ export class AdminAnnouncedEventEntity{
     eventName: string;
     @Column()
     filename: string;
+}
+
+@Entity("adminAnnouncedPost")
+export class AdminAnnouncedPostEntity{
+
+    @PrimaryGeneratedColumn() 
+    id: number;
+    @Column({ type: 'varchar', length: 100, })
+    post: string
+    @ManyToOne(() => AdminEntity, admin => admin.posts)
+    admin: AdminEntity;
+
+
 }
