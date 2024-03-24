@@ -93,3 +93,13 @@ export class MyProductEntity {
   // @ManyToOne(() => allProductEntity)
   // product: allProductEntity;
 }
+
+// @Entity('userProfile')
+// export class uploadEntity {
+//   @PrimaryGeneratedColumn()
+//   id: number;
+//   @Column({ type: 'varchar', length: 100 })
+//   eventName: string;
+//   @Column()
+//   filename: string;
+// }

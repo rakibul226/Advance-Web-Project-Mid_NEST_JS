@@ -21,6 +21,7 @@ import {
   UpdateProductDTO,
   borrowBookDTO,
   registrationDTO,
+  // uploadDTO,
 } from './DTO/resident.dto';
 import {
   AllProductEntity,
@@ -122,7 +123,43 @@ export class residentController {
   }
 
   //13.-----------------------------------upload profile pic
-  // @Post('upload-profile')
+  // @Post('uploadPic')
+  // @UseInterceptors(
+  //   FileInterceptor('myfile', {
+  //     fileFilter: (req, file, cb) => {
+  //       if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/)) {
+  //         cb(null, true);
+  //       } else {
+  //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+  //       }
+  //     },
+  //     limits: { fileSize: 3000000 },
+  //     storage: diskStorage({
+  //       destination: './upload',
+  //       filename: (req, file, cb) => {
+  //         cb(null, Date.now() + file.originalname);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // @UsePipes(new ValidationPipe())
+  // async addEvent(
+  //   @Body() myobj: uploadDTO,
+  //   @UploadedFile() myfile: Express.Multer.File,
+  // ): Promise<uploadDTO> {
+  //   myobj.filename = myfile.filename;
+  //   await this.residentService.addEvent(myobj);
+  // }
+  // @UsePipes(new ValidationPipe())
+  // async addEvent(
+  //   @Body() myobj: uploadDTO,
+  //   @UploadedFile() myfile: Express.Multer.File,
+  // ): Promise<uploadDTO> {
+  //   myobj.filename = myfile.filename;
+  //   return this.residentService.addEvent(myobj);
+  // }
+
+  // @Post('Productpic')
   // @UseInterceptors(
   //   FileInterceptor('myfile', {
   //     fileFilter: (req, file, cb) => {
@@ -132,7 +169,7 @@ export class residentController {
   //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
   //       }
   //     },
-  //     limits: { fileSize: 300000 },
+  //     limits: { fileSize: 3000000 },
   //     storage: diskStorage({
   //       destination: './upload',
   //       filename: function (req, file, cb) {
@@ -141,7 +178,44 @@ export class residentController {
   //     }),
   //   }),
   // )
-  // uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   console.log(file);
+  // @UsePipes(new ValidationPipe())
+  // async addEvent(
+  //   @Body() myobj: ProductpictureDTO,
+  //   @UploadedFile() myfile: Express.Multer.File,
+  // ): Promise<ProductpictureDTO> {
+  //   myobj.filename = myfile.filename;
+  //   return this.residentService.addEvent(myobj);
+  // }
+
+  // @Post('upload-profile')
+  // @UseInterceptors(
+  //   FileInterceptor('myfile', {
+  //     fileFilter: (req, file, cb) => {
+  //       if (file.originalname.match(/\.(jpg|jpeg|png|PNG|webp)$/)) {
+  //         cb(null, true);
+  //       } else {
+  //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+  //       }
+  //     },
+  //     limits: { fileSize: 30000 },
+  //     storage: diskStorage({
+  //       destination: './uploads',
+  //       filename: (req, file, cb) => {
+  //         cb(null, Date.now() + '-' + file.originalname);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  //   try {
+  //     if (!file) {
+  //       throw new Error('No file uploaded.');
+  //     }
+  //     console.log('Uploaded file:', file);
+  //     return 'File uploaded successfully.';
+  //   } catch (error) {
+  //     console.error('Error uploading file:', error);
+  //     throw error;
+  //   }
   // }
 }

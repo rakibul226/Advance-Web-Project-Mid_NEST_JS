@@ -8,6 +8,7 @@ import {
   MyBookEntity,
   MyProductEntity,
   ResidentEntity,
+  // uploadEntity,
 } from './ENTITY/resident.entity';
 
 @Module({
@@ -18,6 +19,7 @@ import {
       MyBookEntity,
       MyProductEntity,
       AllProductEntity,
+      // uploadEntity,
     ]),
   ],
   controllers: [residentController],

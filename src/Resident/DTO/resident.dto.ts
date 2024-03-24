@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import {
   IsEmail,
   IsIn,
@@ -75,3 +76,11 @@ export class UpdateProductDTO {
   @Min(1)
   quantity: number;
 }
+
+// export class uploadDTO {
+//   @Optional()
+//   id: number;
+//   @IsNotEmpty()
+//   eventName: string;
+//   filename: string;
+// }

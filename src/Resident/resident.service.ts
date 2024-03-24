@@ -10,11 +10,11 @@ import {
   MyBookEntity,
   MyProductEntity,
   ResidentEntity,
+  // uploadEntity,
 } from './ENTITY/resident.entity';
 import { BuyProductDTO, registrationDTO } from './DTO/resident.dto';
 import { Repository } from 'typeorm';
-import { join } from 'path';
-import { existsSync, mkdirSync, renameSync, unlinkSync } from 'fs';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ResidentService {
@@ -34,7 +34,8 @@ export class ResidentService {
     @InjectRepository(MyProductEntity)
     private myProductRepo: Repository<MyProductEntity>,
 
-    // private readonly mailService: MailerService,
+    // @InjectRepository(uploadEntity)
+    // private readonly uploadRepo: Repository<uploadEntity>,
   ) {}
 
   //--------------------------------user registration
@@ -44,7 +45,8 @@ export class ResidentService {
     const newUser = new ResidentEntity();
     newUser.name = registrationDTO.name;
     newUser.email = registrationDTO.email;
-    newUser.password = registrationDTO.password;
+    const hashedPassword = await bcrypt.hash(registrationDTO.password, 10);
+    newUser.password = hashedPassword;
     newUser.phone = registrationDTO.phone;
     const res = await this.residentRepo.save(newUser);
     return [res];
@@ -53,8 +55,11 @@ export class ResidentService {
   //--------------------------------Login
   async login(email: string, password: string): Promise<ResidentEntity> {
     const user = await this.residentRepo.findOne({
-      where: { email, password },
+      where: { email },
     });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
+    }
     return user;
   }
 
@@ -228,27 +233,7 @@ export class ResidentService {
     return `Order for ${productName} has been successfully canceled.`;
   }
 
-  // async updateProfilePicture(file: Express.Multer.File): Promise<string> {
-  //   if (!file || !file.path) {
-  //     throw new Error('No file provided or invalid file format.');
-  //   }
-
-  //   const uploadDir = './upload';
-  //   const picturePath = join(uploadDir, 'profile_picture.jpg');
-
-  //   // Check if upload directory exists, if not, create it
-  //   if (!existsSync(uploadDir)) {
-  //     mkdirSync(uploadDir);
-  //   }
-
-  //   // Delete the previous profile picture, if exists
-  //   if (existsSync(picturePath)) {
-  //     unlinkSync(picturePath);
-  //   }
-
-  //   // Move the uploaded file to the upload directory and rename it as 'profile_picture.jpg'
-  //   renameSync(file.path, picturePath);
-
-  //   return 'Profile picture updated successfully.';
+  // async addEvent(myobj: uploadEntity): Promise<uploadEntity> {
+  //   return await this.uploadRepo.save(myobj);
   // }
 }
