@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('user')
+@Entity('Productmanagers')
 export class ProductmanagerEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
@@ -17,8 +17,7 @@ export class ProductmanagerEntity {
   @Column()
   phone: string;
 
-  @Column()
-  role: string;
+
 }
 
 
