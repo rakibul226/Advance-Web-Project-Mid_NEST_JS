@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ResidentEntity } from 'src/Resident/ENTITY/resident.entity';
 import { AdminService } from './admin.service';
-import { AdminEventAnnouncementDTO, UserUpdateDTO } from './admin.dto';
+import { AdminRegistrationDTO, AdminEventAnnouncementDTO, UserUpdateDTO } from './admin.dto';
 import { registrationDTO } from 'src/Resident/DTO/resident.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -10,46 +10,46 @@ import { MulterError, diskStorage } from 'multer';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  // get all users
-  @Get('/getallusers')
+  // register as admin
+  @Post('/registration')
+  @UsePipes(ValidationPipe)
+  registration(@Body() adminRegistrationDTO: AdminRegistrationDTO): any {
+    return this.adminService.registration(adminRegistrationDTO);
+  }
+  // get all residents
+  @Get('/getallresidents')
   getAllUsers(): Promise<ResidentEntity[]> {
     return this.adminService.getAllUsers();
   }
 
-  // get user by email
-  @Get('getuser/:email')
+  // get resident by email
+  @Get('getresident/:email')
   getUserByEmail(@Param('email') email: string): object {
     return this.adminService.getUserByEmail(email);
   }
 
-  // delete user by id
-  @Delete('deleteuser/:id')
+  // delete resident by id
+  @Delete('deleteresident/:id')
   deleteUserById(@Param('id', ParseIntPipe) id: number): object {
     return this.adminService.deleteUserById(id);
   }
 
-  // update user information by id
-  @Put('/updateuser/:id')
+  // update resident information by id
+  @Put('/updateresident/:id')
   @UsePipes(new ValidationPipe())
   updateUserbyID(@Param('id', ParseIntPipe) id: number, @Body() data: UserUpdateDTO): object {
     return this.adminService.updateUserById(id, data);
   }
 
-  // update user user role by id(User Role Assignment)
-  @Patch('/updateuserrole/:id')
-  @UsePipes(new ValidationPipe())
-  updateUserRolebyID(@Param('id', ParseIntPipe) id: number, @Body() data: UserUpdateDTO): object {
-    return this.adminService.updateUserRoleById(id, data);
-  }
 
-  // get users by partial match(Search by name)
-  @Get('getusersbyname/:name')
+  // get resident by partial match(Search by name)
+  @Get('getresidentsbyname/:name')
   getUsersByName(@Param('name') name: string){
       return this.adminService.getUsersByName(name);
   }
 
-  // add user
-  @Post('/adduser')
+  // add resident
+  @Post('/addresident')
   @UsePipes(ValidationPipe)
   async addUser(@Body() user: registrationDTO): Promise<registrationDTO> {
     return this.adminService.addUser(user);
