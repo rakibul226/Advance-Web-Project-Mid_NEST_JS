@@ -77,5 +77,6 @@ export class UpdateProductDTO {
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(1)
   quantity: number;
 }

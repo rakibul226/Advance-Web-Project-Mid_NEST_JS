@@ -186,4 +186,13 @@ export class ResidentService {
     }
     return product;
   }
+
+  //11.---------------------------------view all product
+  async viewBoughtProduct(): Promise<MyProductEntity[] | string> {
+    const product = await this.myProductRepo.find();
+    if (product.length === 0) {
+      return 'No product Available';
+    }
+    return product;
+  }
 }

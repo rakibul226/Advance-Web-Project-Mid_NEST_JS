@@ -24,6 +24,7 @@ import {
   AllProductEntity,
   BookEntity,
   MyBookEntity,
+  MyProductEntity,
 } from './ENTITY/resident.entity';
 
 @Controller('user')
@@ -102,5 +103,11 @@ export class residentController {
   @Get('/view-all-product')
   async viewAllProduct(): Promise<AllProductEntity[] | string> {
     return await this.residentService.viewAllProduct();
+  }
+
+  //11.---------------------------------view bought product
+  @Get('/viewBoughtProduct')
+  async viewBoughtProduct(): Promise<MyProductEntity[] | string> {
+    return await this.residentService.viewBoughtProduct();
   }
 }
