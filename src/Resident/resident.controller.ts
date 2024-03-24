@@ -7,6 +7,7 @@ import {
   BadRequestException,
   Get,
   Param,
+  Put,
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,6 +15,7 @@ import {
   BuyProductDTO,
   LoginDTO,
   SearchDTO,
+  UpdateProductDTO,
   borrowBookDTO,
   registrationDTO,
 } from './DTO/resident.dto';
@@ -48,7 +50,7 @@ export class residentController {
     return this.residentService.borrowBook(borrowBookDTO.bookName);
   }
 
-  //4.---------------------------------buy book
+  //4.---------------------------------find by name
   @Get('findbook/:name')
   @UsePipes(new ValidationPipe())
   async findBookByName(@Param() searchDTO: SearchDTO): Promise<string> {
@@ -61,14 +63,26 @@ export class residentController {
     return await this.residentService.viewAllBooks();
   }
 
-  //6.---------------------------------view all book
+  //6.---------------------------------view borrow book
   @Get('/viewBorrowedBook')
   async viewMyBooks(): Promise<MyBookEntity[] | string> {
     return await this.residentService.viewMyBooks();
   }
 
+  //7.---------------------------------view borrow book
   @Post('/buyProduct')
   async buyProduct(@Body(ValidationPipe) buyProductDto: BuyProductDTO) {
     return await this.residentService.buyProduct(buyProductDto);
+  }
+
+  //8.---------------------------------view borrow book
+  @Put('updateProduct')
+  async updateProduct(
+    @Body(ValidationPipe) updateProductDto: UpdateProductDTO,
+  ) {
+    return this.residentService.updateProduct(
+      updateProductDto.productName,
+      updateProductDto.quantity,
+    );
   }
 }

@@ -1,3 +1,4 @@
+import { IsNotEmpty, IsNumber } from 'class-validator';
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')

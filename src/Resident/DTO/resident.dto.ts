@@ -67,3 +67,15 @@ export class BuyProductDTO {
   @Min(1)
   quantity: number;
 }
+
+// -------------------------------------Update product DTO
+
+export class UpdateProductDTO {
+  @IsNotEmpty()
+  @IsString()
+  productName: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  quantity: number;
+}

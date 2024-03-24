@@ -19,14 +19,18 @@ export class ResidentService {
   constructor(
     @InjectRepository(ResidentEntity)
     private residentRepo: Repository<ResidentEntity>,
+
     @InjectRepository(BookEntity)
     private bookRepo: Repository<BookEntity>,
+
     @InjectRepository(MyBookEntity)
     private myBookRepo: Repository<MyBookEntity>,
+
     @InjectRepository(AllProductEntity)
-    private allProductRepository: Repository<AllProductEntity>,
+    private allProductRepo: Repository<AllProductEntity>,
+
     @InjectRepository(MyProductEntity)
-    private myProductRepository: Repository<MyProductEntity>,
+    private myProductRepo: Repository<MyProductEntity>,
   ) {}
 
   //--------------------------------user registration
@@ -104,7 +108,7 @@ export class ResidentService {
   //--------------------------------buy product
   async buyProduct(buyProductDto: BuyProductDTO) {
     const { productName, quantity } = buyProductDto;
-    const product = await this.allProductRepository.findOne({
+    const product = await this.allProductRepo.findOne({
       where: { name: productName },
     });
     if (!product) {
@@ -114,7 +118,7 @@ export class ResidentService {
       throw new BadRequestException('Not enough quantity available');
     }
     product.quantity -= quantity;
-    await this.allProductRepository.save(product);
+    await this.allProductRepo.save(product);
     const totalPrice = product.price * quantity;
 
     const myProduct = new MyProductEntity();
@@ -122,8 +126,47 @@ export class ResidentService {
     myProduct.name = product.name;
     myProduct.quantity = quantity;
     myProduct.totalPrice = totalPrice;
-    await this.myProductRepository.save(myProduct);
+    await this.myProductRepo.save(myProduct);
 
     return { message: 'Product purchased successfully', myProduct };
+  }
+
+  //--------------------------------update product
+  async updateProduct(productName: string, quantity: number) {
+    const myProduct = await this.myProductRepo.findOne({
+      where: { name: productName },
+    });
+    if (!myProduct) {
+      return {
+        message: `Product with name ${productName} not found in your products`,
+      };
+    }
+
+    const product = await this.allProductRepo.findOne({
+      where: { name: productName },
+    });
+    if (!product) {
+      throw new BadRequestException(
+        `Product with name ${productName} not found in all products`,
+      );
+    }
+
+    if (product.quantity < quantity) {
+      throw new BadRequestException('Not enough quantity available to update');
+    }
+
+    const quantityDifference = quantity - myProduct.quantity;
+
+    myProduct.quantity = quantity;
+
+    const totalPriceDifference = quantityDifference * product.price;
+    myProduct.totalPrice += totalPriceDifference;
+
+    await this.myProductRepo.save(myProduct);
+
+    product.quantity -= quantityDifference;
+    await this.allProductRepo.save(product);
+
+    return { message: 'Product updated successfully' };
   }
 }
