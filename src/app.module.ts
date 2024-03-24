@@ -7,7 +7,7 @@ import { AdminModule } from './Admin/admin.module';
 import { ProductmanagerModule } from './product_manager/Productmanager.module';
 import { LibraryModule } from './librarymanager/library/library.module';
 import { BookModule } from './librarymanager/Book_Manager/book.module';
-// import { mailModule } from './Resident/Mail/mail.module';
+import { mailModule } from './Resident/Mail/mail.module';
 // import { LibraryModule } from './librarymanager/library/library.module';
 // import { BookModule } from './librarymanager/Book_Manager/book.module';
 
@@ -17,7 +17,7 @@ import { BookModule } from './librarymanager/Book_Manager/book.module';
     AdminModule,
     ProductmanagerModule,
     LibraryModule,
-    //mailModule, // import your userModule  here
+    mailModule, // import your userModule  here
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

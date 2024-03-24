@@ -13,6 +13,8 @@ import {
 } from './ENTITY/resident.entity';
 import { BuyProductDTO, registrationDTO } from './DTO/resident.dto';
 import { Repository } from 'typeorm';
+import { join } from 'path';
+import { existsSync, mkdirSync, renameSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class ResidentService {
@@ -225,4 +227,28 @@ export class ResidentService {
 
     return `Order for ${productName} has been successfully canceled.`;
   }
+
+  // async updateProfilePicture(file: Express.Multer.File): Promise<string> {
+  //   if (!file || !file.path) {
+  //     throw new Error('No file provided or invalid file format.');
+  //   }
+
+  //   const uploadDir = './upload';
+  //   const picturePath = join(uploadDir, 'profile_picture.jpg');
+
+  //   // Check if upload directory exists, if not, create it
+  //   if (!existsSync(uploadDir)) {
+  //     mkdirSync(uploadDir);
+  //   }
+
+  //   // Delete the previous profile picture, if exists
+  //   if (existsSync(picturePath)) {
+  //     unlinkSync(picturePath);
+  //   }
+
+  //   // Move the uploaded file to the upload directory and rename it as 'profile_picture.jpg'
+  //   renameSync(file.path, picturePath);
+
+  //   return 'Profile picture updated successfully.';
+  // }
 }

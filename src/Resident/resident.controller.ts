@@ -9,6 +9,8 @@ import {
   Param,
   Put,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,6 +28,8 @@ import {
   MyBookEntity,
   MyProductEntity,
 } from './ENTITY/resident.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterError, diskStorage } from 'multer';
 
 @Controller('user')
 export class residentController {
@@ -118,4 +122,26 @@ export class residentController {
   }
 
   //13.-----------------------------------upload profile pic
+  // @Post('upload-profile')
+  // @UseInterceptors(
+  //   FileInterceptor('myfile', {
+  //     fileFilter: (req, file, cb) => {
+  //       if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
+  //         cb(null, true);
+  //       else {
+  //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+  //       }
+  //     },
+  //     limits: { fileSize: 300000 },
+  //     storage: diskStorage({
+  //       destination: './upload',
+  //       filename: function (req, file, cb) {
+  //         cb(null, Date.now() + file.originalname);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // uploadFile(@UploadedFile() file: Express.Multer.File) {
+  //   console.log(file);
+  // }
 }
