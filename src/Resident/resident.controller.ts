@@ -116,4 +116,6 @@ export class residentController {
   async cancelOrder(@Param('name') name: string): Promise<string> {
     return this.residentService.cancelOrder(name);
   }
+
+  //13.-----------------------------------upload profile pic
 }

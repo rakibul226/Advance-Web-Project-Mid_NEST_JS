@@ -31,6 +31,8 @@ export class ResidentService {
 
     @InjectRepository(MyProductEntity)
     private myProductRepo: Repository<MyProductEntity>,
+
+    // private readonly mailService: MailerService,
   ) {}
 
   //--------------------------------user registration
@@ -212,7 +214,7 @@ export class ResidentService {
     });
     if (!allProduct) {
       throw new NotFoundException(
-        `Product ${productName} not found in the inventory`,
+        `Product ${productName} not found in the inventory to return`,
       );
     }
     allProduct.quantity += myProduct.quantity;
