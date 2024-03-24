@@ -1,6 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity('Productpicture')
+export class ProductpictureEntity{
 
+    @PrimaryGeneratedColumn() 
+    id: number;
+    @Column({ type: 'varchar', length: 100, })
+    productname: string;
+    @Column()
+    filename: string;
+}
 
 @Entity('products')
 export class Productentity {
@@ -20,6 +29,10 @@ export class Productentity {
   quantity: number;
   // Add more fields as needed...
 }
+
+
+
+
 
 
 

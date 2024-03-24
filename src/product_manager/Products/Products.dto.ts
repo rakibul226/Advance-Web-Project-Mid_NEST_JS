@@ -6,9 +6,10 @@ import {
     Matches,
     MinLength,
     IsOptional,
+  
     IsNumber
   } from 'class-validator';
-  
+  import { Optional } from '@nestjs/common';
 
  
 
@@ -38,4 +39,13 @@ import {
   export class DeleteProductDTO {
     @IsNumber()
     id: number;
+  }
+
+
+  export class ProductpictureDTO {
+    @Optional()
+    id: number
+    @IsNotEmpty()
+    productname: string;
+    filename: string
   }

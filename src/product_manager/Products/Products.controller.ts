@@ -1,11 +1,12 @@
 import {
-   Body,Controller,Get,Post,UsePipes,ValidationPipe,Put, Delete, Param
+   Body,Controller,Get,Post,UsePipes,ValidationPipe,Put, Delete, Param, UploadedFile, UseInterceptors
 } from '@nestjs/common';
 import { ProductService } from './Products.service';
 
 import { Productentity } from './Products.entity';
-import { CreateProductDTO, UpdateProductDTO } from './Products.dto'; // Assuming you have a DTO for creating products
-
+import { CreateProductDTO, UpdateProductDTO,ProductpictureDTO } from './Products.dto'; // Assuming you have a DTO for creating products
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterError, diskStorage } from 'multer';
 
 @Controller('products') // Update the controller route to match the provided example
 export class ProductController {
@@ -38,4 +39,35 @@ export class ProductController {
     await this.productService.remove(+id);
     return { message: 'product deleted successfully' };
   }
+
+  @Post('Productpic')
+  @UseInterceptors(FileInterceptor('myfile',
+      {
+          fileFilter: (req, file, cb) => {
+              if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
+                  cb(null, true);
+              else {
+                  cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+              }
+          },
+          limits: { fileSize: 3000000 },
+          storage: diskStorage({
+              destination: './upload',
+              filename: function (req, file, cb) {
+                  cb(null, Date.now() + file.originalname)
+              },
+          })
+      }
+  ))
+
+  @UsePipes(new ValidationPipe)
+    async addEvent(@Body() myobj: ProductpictureDTO, @UploadedFile() myfile: Express.Multer.File): Promise<ProductpictureDTO> {
+        myobj.filename = myfile.filename;
+        return this.productService.addEvent(myobj);
+    }
 }
+
+
+
+
+  
