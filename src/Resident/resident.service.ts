@@ -177,4 +177,13 @@ export class ResidentService {
 
     return { message: 'Product updated successfully' };
   }
+
+  //10.---------------------------------view all product
+  async viewAllProduct(): Promise<AllProductEntity[] | string> {
+    const product = await this.allProductRepo.find();
+    if (product.length === 0) {
+      return 'No product Available';
+    }
+    return product;
+  }
 }

@@ -20,7 +20,11 @@ import {
   borrowBookDTO,
   registrationDTO,
 } from './DTO/resident.dto';
-import { BookEntity, MyBookEntity } from './ENTITY/resident.entity';
+import {
+  AllProductEntity,
+  BookEntity,
+  MyBookEntity,
+} from './ENTITY/resident.entity';
 
 @Controller('user')
 export class residentController {
@@ -84,7 +88,7 @@ export class residentController {
   }
 
   //9.---------------------------------update product
-  @Put('updateQuantity')
+  @Put('/updateQuantity')
   async updateProduct(
     @Body(ValidationPipe) updateProductDto: UpdateProductDTO,
   ) {
@@ -92,5 +96,11 @@ export class residentController {
       updateProductDto.productName,
       updateProductDto.quantity,
     );
+  }
+
+  //10.---------------------------------view all product
+  @Get('/view-all-product')
+  async viewAllProduct(): Promise<AllProductEntity[] | string> {
+    return await this.residentService.viewAllProduct();
   }
 }
