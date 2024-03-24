@@ -9,8 +9,6 @@ import {
   MyProductEntity,
   ResidentEntity,
 } from './ENTITY/resident.entity';
-import { mailModule } from './Mail/mail.module';
-// import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -20,7 +18,6 @@ import { mailModule } from './Mail/mail.module';
       MyBookEntity,
       MyProductEntity,
       AllProductEntity,
-      mailModule,
     ]),
   ],
   controllers: [residentController],
