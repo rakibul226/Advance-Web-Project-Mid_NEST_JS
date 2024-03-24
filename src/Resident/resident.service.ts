@@ -195,4 +195,33 @@ export class ResidentService {
     }
     return product;
   }
+
+  //12.----------------------------------cancel order
+  async cancelOrder(productName: string): Promise<string> {
+    const myProduct = await this.myProductRepo.findOne({
+      where: { name: productName },
+    });
+    if (!myProduct) {
+      throw new NotFoundException(
+        `You haven't ordered the product ${productName}`,
+      );
+    }
+
+    const allProduct = await this.allProductRepo.findOne({
+      where: { name: productName },
+    });
+    if (!allProduct) {
+      throw new NotFoundException(
+        `Product ${productName} not found in the inventory`,
+      );
+    }
+    allProduct.quantity += myProduct.quantity;
+
+    await Promise.all([
+      this.myProductRepo.remove(myProduct),
+      this.allProductRepo.save(allProduct),
+    ]);
+
+    return `Order for ${productName} has been successfully canceled.`;
+  }
 }

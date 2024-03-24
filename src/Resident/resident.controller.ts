@@ -110,4 +110,10 @@ export class residentController {
   async viewBoughtProduct(): Promise<MyProductEntity[] | string> {
     return await this.residentService.viewBoughtProduct();
   }
+
+  //12.----------------------------------cancel order
+  @Delete('/cancel-order/:name')
+  async cancelOrder(@Param('name') name: string): Promise<string> {
+    return this.residentService.cancelOrder(name);
+  }
 }
