@@ -105,6 +105,16 @@ export class ResidentService {
     return books;
   }
 
+  //6.---------------------------------Delete borrowed book
+  async deleteBookByName(name: string): Promise<string> {
+    const product = await this.myBookRepo.findOne({ where: { name } });
+    if (!product) {
+      throw new NotFoundException(`You haven't borrowed the product ${name}`);
+    }
+    await this.myBookRepo.remove(product);
+    return `Book "${name}" has been deleted from`;
+  }
+
   //--------------------------------buy product
   async buyProduct(buyProductDto: BuyProductDTO) {
     const { productName, quantity } = buyProductDto;

@@ -8,6 +8,7 @@ import {
   Get,
   Param,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -69,13 +70,22 @@ export class residentController {
     return await this.residentService.viewMyBooks();
   }
 
-  //7.---------------------------------view borrow book
+  //6.--------------------------------Delete borrowed book
+  @Delete('/delete/:name')
+  async deleteBookByName(
+    @Param('name') name: string,
+  ): Promise<{ message: string }> {
+    const message = await this.residentService.deleteBookByName(name);
+    return { message };
+  }
+
+  //8.---------------------------------buy product
   @Post('/buyProduct')
   async buyProduct(@Body(ValidationPipe) buyProductDto: BuyProductDTO) {
     return await this.residentService.buyProduct(buyProductDto);
   }
 
-  //8.---------------------------------view borrow book
+  //9.---------------------------------update product
   @Put('updateProduct')
   async updateProduct(
     @Body(ValidationPipe) updateProductDto: UpdateProductDTO,
