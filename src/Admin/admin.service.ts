@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ResidentEntity } from 'src/Resident/ENTITY/resident.entity';
 import { UserUpdateDTO } from './admin.dto';
 import { Like } from 'typeorm';
+import { registrationDTO } from 'src/Resident/DTO/resident.dto';
+import { AdminAnnouncedEventEntity } from './admin.entity';
 
 @Injectable()
 export class AdminService {
   constructor(
-    // @InjectRepository(AdminEntity)
-    // private adminRepo: Repository<AdminEntity>,
+    @InjectRepository(AdminAnnouncedEventEntity)
+    private adminRepo: Repository<AdminAnnouncedEventEntity>,
     @InjectRepository(ResidentEntity)
     private residentRepo: Repository<ResidentEntity>,
   ) {}
@@ -49,5 +51,15 @@ export class AdminService {
             name: Like(`%${name}%`),
         },
     });
-}
+  }
+
+  // add new user
+  async addUser(user:registrationDTO):Promise<registrationDTO>{
+    await this.residentRepo.save(user); 
+    return user;  
+  }
+
+  async addEvent(myobj: AdminAnnouncedEventEntity): Promise<AdminAnnouncedEventEntity> {
+    return await this.adminRepo.save(myobj);
+  }
 }

@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import {
     IsEmail,
     IsIn,
@@ -27,4 +28,12 @@ import {
     @IsString()
     @IsIn(['admin', 'resident', 'librarian', 'manager'])
     role: string;
+  }
+
+  export class AdminEventAnnouncementDTO {
+    @Optional()
+    id: number
+    @IsNotEmpty()
+    eventName: string;
+    filename: string
   }

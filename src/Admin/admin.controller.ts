@@ -1,7 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ResidentEntity } from 'src/Resident/ENTITY/resident.entity';
 import { AdminService } from './admin.service';
-import { UserUpdateDTO } from './admin.dto';
+import { AdminEventAnnouncementDTO, UserUpdateDTO } from './admin.dto';
+import { registrationDTO } from 'src/Resident/DTO/resident.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterError, diskStorage } from 'multer';
 
 @Controller('/admin')
 export class AdminController {
@@ -44,4 +47,37 @@ export class AdminController {
   getUsersByName(@Param('name') name: string){
       return this.adminService.getUsersByName(name);
   }
+
+  // add user
+  @Post('/adduser')
+  @UsePipes(ValidationPipe)
+  async addUser(@Body() user: registrationDTO): Promise<registrationDTO> {
+    return this.adminService.addUser(user);
+  }
+
+  // local event announcement
+  @Post('addevent')
+    @UseInterceptors(FileInterceptor('myfile',
+        {
+            fileFilter: (req, file, cb) => {
+                if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
+                    cb(null, true);
+                else {
+                    cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+                }
+            },
+            limits: { fileSize: 3000000 },
+            storage: diskStorage({
+                destination: './upload',
+                filename: function (req, file, cb) {
+                    cb(null, Date.now() + file.originalname)
+                },
+            })
+        }
+    ))
+    @UsePipes(new ValidationPipe)
+    async addEvent(@Body() myobj: AdminEventAnnouncementDTO, @UploadedFile() myfile: Express.Multer.File): Promise<AdminEventAnnouncementDTO> {
+        myobj.filename = myfile.filename;
+        return this.adminService.addEvent(myobj);
+    }
 }
