@@ -2,8 +2,10 @@ import {
   IsEmail,
   IsIn,
   IsNotEmpty,
+  IsNumber,
   IsString,
   Matches,
+  Min,
   MinLength,
 } from 'class-validator';
 
@@ -42,14 +44,26 @@ export class LoginDTO {
   @IsString()
   password: string;
 }
-// -------------------------------------BuyBook DTO
-export class BuyBookDTO {
+// -------------------------------------borrowBook DTO
+export class borrowBookDTO {
   @IsNotEmpty()
   @IsString()
   bookName: string;
 }
-
+// -------------------------------------search DTO
 export class SearchDTO {
   @IsString()
   name: string;
+}
+
+// -------------------------------------buy product DTO
+export class BuyProductDTO {
+  @IsNotEmpty()
+  @IsString()
+  productName: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  quantity: number;
 }

@@ -11,9 +11,10 @@ import {
 import { ResidentService } from './resident.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
-  BuyBookDTO,
+  BuyProductDTO,
   LoginDTO,
   SearchDTO,
+  borrowBookDTO,
   registrationDTO,
 } from './DTO/resident.dto';
 import { BookEntity, MyBookEntity } from './ENTITY/resident.entity';
@@ -42,9 +43,9 @@ export class residentController {
   }
 
   //3---------------------------------buy book
-  @Post('/buy-book')
-  async buyBook(@Body() buyBookDTO: BuyBookDTO): Promise<BookEntity> {
-    return this.residentService.buyBook(buyBookDTO.bookName);
+  @Post('/borrow-book')
+  async borrowBook(@Body() borrowBookDTO: borrowBookDTO): Promise<BookEntity> {
+    return this.residentService.borrowBook(borrowBookDTO.bookName);
   }
 
   //4.---------------------------------buy book
@@ -60,8 +61,14 @@ export class residentController {
     return await this.residentService.viewAllBooks();
   }
 
-  @Get('/view-myBook')
+  //6.---------------------------------view all book
+  @Get('/viewBorrowedBook')
   async viewMyBooks(): Promise<MyBookEntity[] | string> {
     return await this.residentService.viewMyBooks();
+  }
+
+  @Post('/buyProduct')
+  async buyProduct(@Body(ValidationPipe) buyProductDto: BuyProductDTO) {
+    return await this.residentService.buyProduct(buyProductDto);
   }
 }

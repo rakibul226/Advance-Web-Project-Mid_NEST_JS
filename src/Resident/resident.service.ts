@@ -1,11 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  AllProductEntity,
   BookEntity,
   MyBookEntity,
+  MyProductEntity,
   ResidentEntity,
 } from './ENTITY/resident.entity';
-import { registrationDTO } from './DTO/resident.dto';
+import { BuyProductDTO, registrationDTO } from './DTO/resident.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -17,6 +23,10 @@ export class ResidentService {
     private bookRepo: Repository<BookEntity>,
     @InjectRepository(MyBookEntity)
     private myBookRepo: Repository<MyBookEntity>,
+    @InjectRepository(AllProductEntity)
+    private allProductRepository: Repository<AllProductEntity>,
+    @InjectRepository(MyProductEntity)
+    private myProductRepository: Repository<MyProductEntity>,
   ) {}
 
   //--------------------------------user registration
@@ -33,7 +43,7 @@ export class ResidentService {
     return [res];
   }
 
-  //--------------------------------user registration
+  //--------------------------------Login
   async login(email: string, password: string): Promise<ResidentEntity> {
     const user = await this.residentRepo.findOne({
       where: { email, password },
@@ -41,8 +51,8 @@ export class ResidentService {
     return user;
   }
 
-  //--------------------------------user registration
-  async buyBook(bookName: string): Promise<BookEntity | null> {
+  //--------------------------------borrowBook
+  async borrowBook(bookName: string): Promise<BookEntity | null> {
     const book = await this.bookRepo.findOne({
       where: { name: bookName },
     });
@@ -62,7 +72,7 @@ export class ResidentService {
     return book;
   }
 
-  //--------------------------------user registration
+  //--------------------------------Find Book By name
   async findByName(name: string): Promise<string> {
     const book = await this.bookRepo.findOne({ where: { name } });
 
@@ -89,5 +99,31 @@ export class ResidentService {
       return "You haven't Purchased any book";
     }
     return books;
+  }
+
+  //--------------------------------buy product
+  async buyProduct(buyProductDto: BuyProductDTO) {
+    const { productName, quantity } = buyProductDto;
+    const product = await this.allProductRepository.findOne({
+      where: { name: productName },
+    });
+    if (!product) {
+      throw new NotFoundException(`Product with name ${productName} not found`);
+    }
+    if (product.quantity < quantity) {
+      throw new BadRequestException('Not enough quantity available');
+    }
+    product.quantity -= quantity;
+    await this.allProductRepository.save(product);
+    const totalPrice = product.price * quantity;
+
+    const myProduct = new MyProductEntity();
+    myProduct.product_id = product.product_id;
+    myProduct.name = product.name;
+    myProduct.quantity = quantity;
+    myProduct.totalPrice = totalPrice;
+    await this.myProductRepository.save(myProduct);
+
+    return { message: 'Product purchased successfully', myProduct };
   }
 }

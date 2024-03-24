@@ -21,6 +21,7 @@ export class ResidentEntity {
   role: string;
 }
 
+//---------------------------------All book entity
 @Entity('all_book')
 export class BookEntity {
   @PrimaryGeneratedColumn()
@@ -42,6 +43,7 @@ export class BookEntity {
   quantity: number;
 }
 
+//---------------------------------My book entity
 @Entity('myBook')
 export class MyBookEntity {
   @PrimaryColumn()
@@ -58,4 +60,41 @@ export class MyBookEntity {
 
   @Column()
   price: number;
+}
+//---------------------------------ALL product entity
+@Entity('allProduct')
+export class AllProductEntity {
+  @PrimaryColumn()
+  product_id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  price: number;
+
+  @Column()
+  quantity: number;
+}
+
+//---------------------------------myProduct entity
+@Entity('myProduct')
+export class MyProductEntity {
+  @PrimaryColumn()
+  product_id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  totalPrice: number;
+
+  @Column()
+  quantity: number;
+
+  // @ManyToOne(() => allProductEntity)
+  // product: allProductEntity;
 }
