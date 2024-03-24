@@ -47,7 +47,7 @@ export class residentController {
 
   //3---------------------------------buy book
   @Post('/borrow-book')
-  async borrowBook(@Body() borrowBookDTO: borrowBookDTO): Promise<BookEntity> {
+  async borrowBook(@Body() borrowBookDTO: borrowBookDTO): Promise<string> {
     return this.residentService.borrowBook(borrowBookDTO.bookName);
   }
 
@@ -70,13 +70,11 @@ export class residentController {
     return await this.residentService.viewMyBooks();
   }
 
-  //6.--------------------------------Delete borrowed book
+  //7.--------------------------------Delete borrowed book
   @Delete('/delete/:name')
-  async deleteBookByName(
-    @Param('name') name: string,
-  ): Promise<{ message: string }> {
+  async deleteBookByName(@Param('name') name: string): Promise<string> {
     const message = await this.residentService.deleteBookByName(name);
-    return { message };
+    return message;
   }
 
   //8.---------------------------------buy product
@@ -86,7 +84,7 @@ export class residentController {
   }
 
   //9.---------------------------------update product
-  @Put('updateProduct')
+  @Put('updateQuantity')
   async updateProduct(
     @Body(ValidationPipe) updateProductDto: UpdateProductDTO,
   ) {

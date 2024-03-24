@@ -56,7 +56,7 @@ export class ResidentService {
   }
 
   //--------------------------------borrowBook
-  async borrowBook(bookName: string): Promise<BookEntity | null> {
+  async borrowBook(bookName: string): Promise<string> {
     const book = await this.bookRepo.findOne({
       where: { name: bookName },
     });
@@ -69,11 +69,9 @@ export class ResidentService {
     myBook.name = book.name;
     myBook.author = book.author;
     myBook.category = book.category;
-    myBook.price = book.price;
-
     await this.myBookRepo.save(myBook);
 
-    return book;
+    return `${book.name} successfully borrowed`;
   }
 
   //--------------------------------Find Book By name
@@ -112,7 +110,7 @@ export class ResidentService {
       throw new NotFoundException(`You haven't borrowed the product ${name}`);
     }
     await this.myBookRepo.remove(product);
-    return `Book "${name}" has been deleted from`;
+    return `Book ${name} has been deleted`;
   }
 
   //--------------------------------buy product

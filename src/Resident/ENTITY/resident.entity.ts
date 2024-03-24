@@ -58,9 +58,6 @@ export class MyBookEntity {
 
   @Column()
   category: string;
-
-  @Column()
-  price: number;
 }
 //---------------------------------ALL product entity
 @Entity('allProduct')
