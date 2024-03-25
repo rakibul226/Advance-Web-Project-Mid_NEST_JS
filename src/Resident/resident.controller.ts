@@ -11,6 +11,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  NotFoundException,
 } from '@nestjs/common';
 import { ResidentService } from './resident.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,6 +29,7 @@ import {
   BookEntity,
   MyBookEntity,
   MyProductEntity,
+  UpdateResidentDto,
 } from './ENTITY/resident.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -88,9 +90,17 @@ export class residentController {
   }
 
   //8.---------------------------------buy product
-  @Post('/buyProduct')
-  async buyProduct(@Body(ValidationPipe) buyProductDto: BuyProductDTO) {
-    return await this.residentService.buyProduct(buyProductDto);
+  // @Post('/buyProduct')
+  // async buyProduct(@Body(ValidationPipe) buyProductDto: BuyProductDTO) {
+  //   return await this.residentService.buyProduct(buyProductDto);
+  // }
+
+  @Post(':residentId/buyProduct')
+  async buyProduct(
+    @Param('residentId') residentId: number,
+    @Body() buyProductDto: BuyProductDTO,
+  ) {
+    return await this.residentService.buyProduct(residentId, buyProductDto);
   }
 
   //9.---------------------------------update product
@@ -218,4 +228,26 @@ export class residentController {
   //     throw error;
   //   }
   // }
+
+  //13.--------------------------------search product by name
+  @Get('searchProduct/:name')
+  @UsePipes(new ValidationPipe())
+  async searchProduct(@Param() searchDTO: SearchDTO): Promise<string> {
+    return this.residentService.searchProduct(searchDTO.name);
+  }
+  //14.
+  @Put(':email')
+  async updateResidentByEmail(
+    @Param('email') email: string,
+    @Body() updateResidentDto: UpdateResidentDto,
+  ) {
+    try {
+      return await this.residentService.updateResidentByEmail(
+        email,
+        updateResidentDto,
+      );
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 }

@@ -1,5 +1,13 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('resident')
 export class ResidentEntity {
@@ -9,7 +17,8 @@ export class ResidentEntity {
   @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ unique: true })
+  // @Column()
   email: string;
 
   @Column()
@@ -17,6 +26,9 @@ export class ResidentEntity {
 
   @Column()
   phone: string;
+
+  @OneToMany(() => MyProductEntity, (myProduct) => myProduct.resident)
+  products: MyProductEntity[];
 }
 
 //---------------------------------All book entity
@@ -90,6 +102,9 @@ export class MyProductEntity {
   @Column()
   quantity: number;
 
+  @ManyToOne(() => ResidentEntity, (resident) => resident.products)
+  resident: ResidentEntity;
+
   // @ManyToOne(() => allProductEntity)
   // product: allProductEntity;
 }
@@ -103,3 +118,13 @@ export class MyProductEntity {
 //   @Column()
 //   filename: string;
 // }
+
+export class UpdateResidentDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  phone: string;
+}
