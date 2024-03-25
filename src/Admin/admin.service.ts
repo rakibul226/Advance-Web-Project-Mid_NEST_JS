@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 // import { AdminEntity } from './admin.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -45,7 +45,7 @@ export class AdminService {
       return user;
     }
     return user;
-  }
+  } 
 
   // get all residents
   async getAllUsers(): Promise<ResidentEntity[]> {
@@ -95,5 +95,15 @@ export class AdminService {
     const admin = await this.adminRegistrationRepo.findOneBy({adminId: adminId});
     post.admin = admin;
     return this.adminAnnouncedPostRepo.save(post);
-}
+  }
+
+  // get all events
+  async getAllEvents(): Promise<AdminAnnouncedEventEntity[]> {
+    return this.adminRepo.find();
+  }
+
+  // get all announcements
+  async getAllPosts(): Promise<AdminAnnouncedPostEntity[]> {
+    return this.adminAnnouncedPostRepo.find();
+  }
 }

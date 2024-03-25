@@ -5,7 +5,7 @@ import { AdminRegistrationDTO, AdminEventAnnouncementDTO, UserUpdateDTO, LoginDT
 import { registrationDTO } from 'src/Resident/DTO/resident.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
-import { AdminAnnouncedPostEntity } from './admin.entity';
+import { AdminAnnouncedEventEntity, AdminAnnouncedPostEntity } from './admin.entity';
 
 @Controller('/admin')
 export class AdminController {
@@ -25,9 +25,11 @@ export class AdminController {
     const user = await this.adminService.login(email, password);
     if (!user) {
       throw new BadRequestException('Invalid email or password');
+    }else{
+      return { message: 'Login successful' };
     }
 
-    return { message: 'Login successful' };
+    
   }
 
 
@@ -101,5 +103,17 @@ export class AdminController {
     async addpost(@Param('adminid') adminid: string, @Body() myobj: AdminAnnouncedPostEntity,): Promise<AdminAnnouncedPostEntity> {
 
         return this.adminService.addPost(adminid, myobj);
+    }
+
+    // view admin posted event
+    @Get('viewevents')
+    getAllEvents(): Promise<AdminAnnouncedEventEntity[]> {
+      return this.adminService.getAllEvents();
+    }
+
+    // view admin posted announcements
+    @Get('viewannouncements')
+    getAllPosts(): Promise<AdminAnnouncedPostEntity[]> {
+      return this.adminService.getAllPosts();
     }
 }

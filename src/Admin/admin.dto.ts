@@ -38,10 +38,6 @@ import {
     @Matches(/^[0-9]+$/, { message: 'Phone number must contain only numbers' })
     phone: string;
   
-    @IsNotEmpty()
-    @IsString()
-    @IsIn(['admin', 'resident', 'librarian', 'manager'])
-    role: string;
   }
 
   export class AdminEventAnnouncementDTO {
