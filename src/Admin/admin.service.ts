@@ -7,6 +7,7 @@ import { AdminRegistrationDTO, UserUpdateDTO } from './admin.dto';
 import { Like } from 'typeorm';
 import { registrationDTO } from 'src/Resident/DTO/resident.dto';
 import { AdminAnnouncedEventEntity, AdminAnnouncedPostEntity, AdminEntity } from './admin.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminService {
@@ -21,16 +22,29 @@ export class AdminService {
     private adminAnnouncedPostRepo: Repository<AdminAnnouncedPostEntity>,
   ) {}
 
+  // registration
   async registration(
-    adminDTO: AdminRegistrationDTO,
+    adminRegistrationDTO: AdminRegistrationDTO,
   ): Promise<AdminEntity[]> {
     const newUser = new AdminEntity();
-    newUser.name = adminDTO.name;
-    newUser.email = adminDTO.email;
-    newUser.password = adminDTO.password;
-    newUser.phone = adminDTO.phone;
+    newUser.name = adminRegistrationDTO.name;
+    newUser.email = adminRegistrationDTO.email;
+    const hashedPassword = await bcrypt.hash(adminRegistrationDTO.password, 10);
+    newUser.password = hashedPassword;
+    newUser.phone = adminRegistrationDTO.phone;
     const res = await this.adminRegistrationRepo.save(newUser);
     return [res];
+  }
+
+  //Login
+  async login(email: string, password: string): Promise<AdminEntity> {
+    const user = await this.adminRegistrationRepo.findOne({
+      where: { email },
+    });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
+    }
+    return user;
   }
 
   // get all residents
@@ -75,6 +89,7 @@ export class AdminService {
     return await this.adminRepo.save(myobj);
   }
 
+  // announcement
   async addPost(adminId: string, post: AdminAnnouncedPostEntity): Promise<AdminAnnouncedPostEntity> {
     console.log(adminId);
     const admin = await this.adminRegistrationRepo.findOneBy({adminId: adminId});

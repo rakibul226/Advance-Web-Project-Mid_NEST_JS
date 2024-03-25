@@ -51,3 +51,13 @@ import {
     eventName: string;
     filename: string
   }
+
+  export class LoginDTO {
+    @IsNotEmpty()
+    @IsString()
+    email: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    password: string;
+  }

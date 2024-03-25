@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ResidentEntity } from 'src/Resident/ENTITY/resident.entity';
 import { AdminService } from './admin.service';
-import { AdminRegistrationDTO, AdminEventAnnouncementDTO, UserUpdateDTO } from './admin.dto';
+import { AdminRegistrationDTO, AdminEventAnnouncementDTO, UserUpdateDTO, LoginDTO } from './admin.dto';
 import { registrationDTO } from 'src/Resident/DTO/resident.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -17,6 +17,20 @@ export class AdminController {
   registration(@Body() adminRegistrationDTO: AdminRegistrationDTO): any {
     return this.adminService.registration(adminRegistrationDTO);
   }
+
+  //login
+  @Post('login')
+  async login(@Body() loginDTO: LoginDTO) {
+    const { email, password } = loginDTO;
+    const user = await this.adminService.login(email, password);
+    if (!user) {
+      throw new BadRequestException('Invalid email or password');
+    }
+
+    return { message: 'Login successful' };
+  }
+
+
   // get all residents
   @Get('/getallresidents')
   getAllUsers(): Promise<ResidentEntity[]> {
