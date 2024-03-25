@@ -104,27 +104,4 @@ export class MyProductEntity {
 
   @ManyToOne(() => ResidentEntity, (resident) => resident.products)
   resident: ResidentEntity;
-
-  // @ManyToOne(() => allProductEntity)
-  // product: allProductEntity;
-}
-
-// @Entity('userProfile')
-// export class uploadEntity {
-//   @PrimaryGeneratedColumn()
-//   id: number;
-//   @Column({ type: 'varchar', length: 100 })
-//   eventName: string;
-//   @Column()
-//   filename: string;
-// }
-
-export class UpdateResidentDto {
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @IsNotEmpty()
-  @IsString()
-  phone: string;
 }

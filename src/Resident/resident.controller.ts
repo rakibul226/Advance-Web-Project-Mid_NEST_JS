@@ -22,6 +22,7 @@ import {
   UpdateProductDTO,
   borrowBookDTO,
   registrationDTO,
+  updateResidentDto,
   // uploadDTO,
 } from './DTO/resident.dto';
 import {
@@ -29,7 +30,6 @@ import {
   BookEntity,
   MyBookEntity,
   MyProductEntity,
-  UpdateResidentDto,
 } from './ENTITY/resident.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -89,12 +89,7 @@ export class residentController {
     return message;
   }
 
-  //8.---------------------------------buy product
-  // @Post('/buyProduct')
-  // async buyProduct(@Body(ValidationPipe) buyProductDto: BuyProductDTO) {
-  //   return await this.residentService.buyProduct(buyProductDto);
-  // }
-
+  //8.--------------------------------user buy product
   @Post(':residentId/buyProduct')
   async buyProduct(
     @Param('residentId') residentId: number,
@@ -132,114 +127,18 @@ export class residentController {
     return this.residentService.cancelOrder(name);
   }
 
-  //13.-----------------------------------upload profile pic
-  // @Post('uploadPic')
-  // @UseInterceptors(
-  //   FileInterceptor('myfile', {
-  //     fileFilter: (req, file, cb) => {
-  //       if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/)) {
-  //         cb(null, true);
-  //       } else {
-  //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
-  //       }
-  //     },
-  //     limits: { fileSize: 3000000 },
-  //     storage: diskStorage({
-  //       destination: './upload',
-  //       filename: (req, file, cb) => {
-  //         cb(null, Date.now() + file.originalname);
-  //       },
-  //     }),
-  //   }),
-  // )
-  // @UsePipes(new ValidationPipe())
-  // async addEvent(
-  //   @Body() myobj: uploadDTO,
-  //   @UploadedFile() myfile: Express.Multer.File,
-  // ): Promise<uploadDTO> {
-  //   myobj.filename = myfile.filename;
-  //   await this.residentService.addEvent(myobj);
-  // }
-  // @UsePipes(new ValidationPipe())
-  // async addEvent(
-  //   @Body() myobj: uploadDTO,
-  //   @UploadedFile() myfile: Express.Multer.File,
-  // ): Promise<uploadDTO> {
-  //   myobj.filename = myfile.filename;
-  //   return this.residentService.addEvent(myobj);
-  // }
-
-  // @Post('Productpic')
-  // @UseInterceptors(
-  //   FileInterceptor('myfile', {
-  //     fileFilter: (req, file, cb) => {
-  //       if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
-  //         cb(null, true);
-  //       else {
-  //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
-  //       }
-  //     },
-  //     limits: { fileSize: 3000000 },
-  //     storage: diskStorage({
-  //       destination: './upload',
-  //       filename: function (req, file, cb) {
-  //         cb(null, Date.now() + file.originalname);
-  //       },
-  //     }),
-  //   }),
-  // )
-  // @UsePipes(new ValidationPipe())
-  // async addEvent(
-  //   @Body() myobj: ProductpictureDTO,
-  //   @UploadedFile() myfile: Express.Multer.File,
-  // ): Promise<ProductpictureDTO> {
-  //   myobj.filename = myfile.filename;
-  //   return this.residentService.addEvent(myobj);
-  // }
-
-  // @Post('upload-profile')
-  // @UseInterceptors(
-  //   FileInterceptor('myfile', {
-  //     fileFilter: (req, file, cb) => {
-  //       if (file.originalname.match(/\.(jpg|jpeg|png|PNG|webp)$/)) {
-  //         cb(null, true);
-  //       } else {
-  //         cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
-  //       }
-  //     },
-  //     limits: { fileSize: 30000 },
-  //     storage: diskStorage({
-  //       destination: './uploads',
-  //       filename: (req, file, cb) => {
-  //         cb(null, Date.now() + '-' + file.originalname);
-  //       },
-  //     }),
-  //   }),
-  // )
-  // async uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   try {
-  //     if (!file) {
-  //       throw new Error('No file uploaded.');
-  //     }
-  //     console.log('Uploaded file:', file);
-  //     return 'File uploaded successfully.';
-  //   } catch (error) {
-  //     console.error('Error uploading file:', error);
-  //     throw error;
-  //   }
-  // }
-
   //13.--------------------------------search product by name
   @Get('searchProduct/:name')
   @UsePipes(new ValidationPipe())
   async searchProduct(@Param() searchDTO: SearchDTO): Promise<string> {
     return this.residentService.searchProduct(searchDTO.name);
   }
+
   //14.
-  @Put(':email')
+  @Put('updateUserInfo/:email')
   async updateResidentByEmail(
     @Param('email') email: string,
-    @Body() updateResidentDto: UpdateResidentDto,
+    @Body() updateResidentDto: updateResidentDto,
   ) {
     try {
       return await this.residentService.updateResidentByEmail(

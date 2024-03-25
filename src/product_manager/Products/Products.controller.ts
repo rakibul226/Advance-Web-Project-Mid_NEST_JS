@@ -1,19 +1,20 @@
 import {
-   Body,Controller,Get,Post,UsePipes,ValidationPipe,Put, Delete, Param, UploadedFile, UseInterceptors
+   Body,Controller,Get,Post,UsePipes,ValidationPipe,Put, Delete, Param, UploadedFile, UseInterceptors,ParseIntPipe
 } from '@nestjs/common';
 import { ProductService } from './Products.service';
-
+import {CommentEntity}from './Comment.entity'
 import { Productentity } from './Products.entity';
-import { CreateProductDTO, UpdateProductDTO,ProductpictureDTO } from './Products.dto'; // Assuming you have a DTO for creating products
+import { CreateProductDTO, UpdateProductDTO,ProductpictureDTO,PostCommentDTO ,GenerateReportDTO} from './Products.dto'; 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
 
-@Controller('products') // Update the controller route to match the provided example
+@Controller('products') 
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @UsePipes(ValidationPipe) // Apply validation pipe for request body validation
-  @Post('addProduct') // Use a consistent naming convention for endpoint URLs
+  @UsePipes(ValidationPipe)
+  @Post('addProduct')
+  @UsePipes(ValidationPipe) 
   async create(@Body()  createproductDTO: CreateProductDTO): Promise<{ message: string, product: Productentity }> {
     const product = await this.productService.create(createproductDTO);
     return { message: 'Product successfully added', product };
@@ -65,6 +66,26 @@ export class ProductController {
         myobj.filename = myfile.filename;
         return this.productService.addEvent(myobj);
     }
+
+
+
+
+
+@Post(':productId/add-comment')
+async addCommentToProduct(
+  @Param('productId', ParseIntPipe) productId: number,
+  @Body() commentDto: PostCommentDTO,
+): Promise<CommentEntity> {
+  return await this.productService.addCommentToProduct(productId, commentDto);
+}
+
+
+
+  @Post('report')
+  async generateSalesReport(@Body() body: any): Promise<any> {
+    
+    return await this.productService.generateReport(new Date(body.startDate), new Date(body.endDate));
+  }
 }
 
 

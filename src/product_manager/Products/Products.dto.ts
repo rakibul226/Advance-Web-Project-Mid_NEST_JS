@@ -6,7 +6,7 @@ import {
     Matches,
     MinLength,
     IsOptional,
-  
+    IsDateString,
     IsNumber
   } from 'class-validator';
   import { Optional } from '@nestjs/common';
@@ -48,4 +48,21 @@ import {
     @IsNotEmpty()
     productname: string;
     filename: string
+  }
+
+  export class PostCommentDTO {
+    @IsNotEmpty()
+    @IsString()
+    content: string;
+  }
+
+
+  export class GenerateReportDTO {
+    @IsNotEmpty()
+    @IsDateString()
+    startDate: string;
+  
+    @IsNotEmpty()
+    @IsDateString()
+    endDate: string;
   }

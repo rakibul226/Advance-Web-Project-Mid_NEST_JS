@@ -21,9 +21,6 @@ export class registrationDTO {
 
   @IsNotEmpty()
   @MinLength(4, { message: 'Password must be at least 4 characters long' })
-  // @Matches(/(?=.*[A-Z])/, {
-  // message: 'Password must contain at least one uppercase letter',
-  // })
   password: string;
 
   @Matches(/^[0-9]+$/, { message: 'Phone number must contain only numbers' })
@@ -77,10 +74,12 @@ export class UpdateProductDTO {
   quantity: number;
 }
 
-// export class uploadDTO {
-//   @Optional()
-//   id: number;
-//   @IsNotEmpty()
-//   eventName: string;
-//   filename: string;
-// }
+export class updateResidentDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  phone: string;
+}

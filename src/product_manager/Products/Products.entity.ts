@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,OneToMany } from 'typeorm';
+import { CommentEntity } from './Comment.entity';
 
 @Entity('Productpicture')
 export class ProductpictureEntity{
@@ -27,9 +28,24 @@ export class Productentity {
   
   @Column()
   quantity: number;
-  // Add more fields as needed...
+  
+  @OneToMany(() => CommentEntity, comment => comment.product, { cascade: true })
+  comments: CommentEntity[];
 }
 
+@Entity('sale')
+export class SaleEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  amount: number;
+
+  @Column()
+  date: Date;
+
+  // Other relevant fields like productId, quantity, etc.
+}
 
 
 

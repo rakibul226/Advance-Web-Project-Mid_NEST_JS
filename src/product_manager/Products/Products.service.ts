@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Productentity ,ProductpictureEntity } from './Products.entity';
-
-import { Repository } from 'typeorm';
-import {CreateProductDTO, UpdateProductDTO } from './Products.dto'
+import { Productentity ,ProductpictureEntity ,SaleEntity} from './Products.entity';
+import {CommentEntity}from './Comment.entity'
+import { Repository ,Between} from 'typeorm';
+import {CreateProductDTO, UpdateProductDTO ,PostCommentDTO,GenerateReportDTO} from './Products.dto'
+import { NotFoundException } from '@nestjs/common';
 
 
 
 
   @Injectable()
   export class ProductService {
+   
     constructor(
+      
+      @InjectRepository(SaleEntity)
+    private salesRepository: Repository<SaleEntity>,
+      
+      
+      @InjectRepository(CommentEntity)
+    private commentRepo: Repository<CommentEntity>,
       @InjectRepository(ProductpictureEntity)
     private productpicRepo: Repository<ProductpictureEntity>,
       @InjectRepository(Productentity)
@@ -45,6 +54,41 @@ import {CreateProductDTO, UpdateProductDTO } from './Products.dto'
     async addEvent(myobj: ProductpictureEntity): Promise<ProductpictureEntity> {
       return await this.productpicRepo.save(myobj);
     }
+
+
+
+    async addCommentToProduct(productId: number, commentDto: PostCommentDTO): Promise<CommentEntity> {
+      const product = await this.productRepo.findOne({ where: { id: productId } });
+      if (!product) {
+        throw new NotFoundException(`Product with ID ${productId} not found`);
+      }
+      
+      const comment = new CommentEntity();
+      comment.content = commentDto.content;
+      comment.product = product;
+      
+      return await this.commentRepo.save(comment);
+    }
+
+
+
+    async generateReport(startDate: Date, endDate: Date): Promise<any> {
+      const sales = await this.salesRepository.find({
+        where: {
+          date: Between(startDate, endDate),
+        },
+      });
+  
+      const totalSales = sales.reduce((total, sale) => total + sale.amount, 0);
+  
+      return {
+        totalSales,
+        reportStartDate: startDate,
+        reportEndDate: endDate,
+      };
+    }
   }
+
+  
 
  

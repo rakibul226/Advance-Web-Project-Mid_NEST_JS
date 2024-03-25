@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -10,10 +11,12 @@ import {
   MyBookEntity,
   MyProductEntity,
   ResidentEntity,
-  UpdateResidentDto,
-  // uploadEntity,
 } from './ENTITY/resident.entity';
-import { BuyProductDTO, registrationDTO } from './DTO/resident.dto';
+import {
+  BuyProductDTO,
+  registrationDTO,
+  updateResidentDto,
+} from './DTO/resident.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -34,9 +37,6 @@ export class ResidentService {
 
     @InjectRepository(MyProductEntity)
     private myProductRepo: Repository<MyProductEntity>,
-
-    // @InjectRepository(uploadEntity)
-    // private readonly uploadRepo: Repository<uploadEntity>,
   ) {}
 
   //--------------------------------user registration
@@ -53,13 +53,16 @@ export class ResidentService {
     return [res];
   }
 
-  //--------------------------------Login
-  async login(email: string, password: string): Promise<ResidentEntity> {
+  async login(email: string, password: string): Promise<ResidentEntity | null> {
     const user = await this.residentRepo.findOne({
       where: { email },
     });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      return user;
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Invalid email or password');
     }
     return user;
   }
@@ -122,36 +125,9 @@ export class ResidentService {
     return `Book ${name} has been deleted`;
   }
 
-  //--------------------------------buy product
-  // async buyProduct(buyProductDto: BuyProductDTO) {
-  //   const { productName, quantity } = buyProductDto;
-  //   const product = await this.allProductRepo.findOne({
-  //     where: { name: productName },
-  //   });
-  //   if (!product) {
-  //     throw new NotFoundException(`Product with name ${productName} not found`);
-  //   }
-  //   if (product.quantity < quantity) {
-  //     throw new BadRequestException('Not enough quantity available');
-  //   }
-  //   product.quantity -= quantity;
-  //   await this.allProductRepo.save(product);
-  //   const totalPrice = product.price * quantity;
-
-  //   const myProduct = new MyProductEntity();
-  //   myProduct.product_id = product.product_id;
-  //   myProduct.name = product.name;
-  //   myProduct.quantity = quantity;
-  //   myProduct.totalPrice = totalPrice;
-  //   await this.myProductRepo.save(myProduct);
-
-  //   return { message: 'Product purchased successfully', myProduct };
-  // }
-
   async buyProduct(residentId: number, buyProductDto: BuyProductDTO) {
     const { productName, quantity } = buyProductDto;
 
-    // Find the resident
     const resident = await this.residentRepo.findOne({
       where: { id: residentId },
     });
@@ -159,7 +135,6 @@ export class ResidentService {
       throw new NotFoundException(`Resident with ID ${residentId} not found`);
     }
 
-    // Find the product
     const product = await this.allProductRepo.findOne({
       where: { name: productName },
     });
@@ -172,16 +147,13 @@ export class ResidentService {
     product.quantity -= quantity;
     await this.allProductRepo.save(product);
 
-    // Calculate total price
     const totalPrice = product.price * quantity;
-
-    // Save the purchased product
     const myProduct = new MyProductEntity();
     myProduct.product_id = product.product_id;
     myProduct.name = product.name;
     myProduct.quantity = quantity;
     myProduct.totalPrice = totalPrice;
-    myProduct.resident = resident; // Associate resident with purchased product
+    myProduct.resident = resident;
     await this.myProductRepo.save(myProduct);
 
     return { message: 'Product purchased successfully', myProduct };
@@ -273,10 +245,6 @@ export class ResidentService {
     return `Order for ${productName} has been successfully canceled.`;
   }
 
-  // async addEvent(myobj: uploadEntity): Promise<uploadEntity> {
-  //   return await this.uploadRepo.save(myobj);
-  // }
-
   //--------------------------------search product by name
   async searchProduct(name: string): Promise<string> {
     const book = await this.allProductRepo.findOne({ where: { name } });
@@ -290,14 +258,13 @@ export class ResidentService {
 
   async updateResidentByEmail(
     email: string,
-    updateResidentDto: UpdateResidentDto,
+    updateResidentDto: updateResidentDto,
   ): Promise<ResidentEntity> {
     const resident = await this.residentRepo.findOne({
       where: { email },
     });
 
     if (!resident) {
-      // Handle error when resident is not found
       throw new Error('Resident not found');
     }
 
