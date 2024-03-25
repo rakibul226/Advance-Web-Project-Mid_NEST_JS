@@ -31,6 +31,8 @@ export class ResidentService {
 
     @InjectRepository(MyProductEntity)
     private myProductRepo: Repository<MyProductEntity>,
+
+    // private readonly mailService: MailerService,
   ) {}
 
   //--------------------------------user registration
@@ -42,7 +44,6 @@ export class ResidentService {
     newUser.email = registrationDTO.email;
     newUser.password = registrationDTO.password;
     newUser.phone = registrationDTO.phone;
-    newUser.role = registrationDTO.role;
     const res = await this.residentRepo.save(newUser);
     return [res];
   }
@@ -56,7 +57,7 @@ export class ResidentService {
   }
 
   //--------------------------------borrowBook
-  async borrowBook(bookName: string): Promise<BookEntity | null> {
+  async borrowBook(bookName: string): Promise<string> {
     const book = await this.bookRepo.findOne({
       where: { name: bookName },
     });
@@ -69,11 +70,9 @@ export class ResidentService {
     myBook.name = book.name;
     myBook.author = book.author;
     myBook.category = book.category;
-    myBook.price = book.price;
-
     await this.myBookRepo.save(myBook);
 
-    return book;
+    return `${book.name} successfully borrowed`;
   }
 
   //--------------------------------Find Book By name
@@ -112,7 +111,7 @@ export class ResidentService {
       throw new NotFoundException(`You haven't borrowed the product ${name}`);
     }
     await this.myBookRepo.remove(product);
-    return `Book "${name}" has been deleted from`;
+    return `Book ${name} has been deleted`;
   }
 
   //--------------------------------buy product
@@ -178,5 +177,52 @@ export class ResidentService {
     await this.allProductRepo.save(product);
 
     return { message: 'Product updated successfully' };
+  }
+
+  //10.---------------------------------view all product
+  async viewAllProduct(): Promise<AllProductEntity[] | string> {
+    const product = await this.allProductRepo.find();
+    if (product.length === 0) {
+      return 'No product Available';
+    }
+    return product;
+  }
+
+  //11.---------------------------------view all product
+  async viewBoughtProduct(): Promise<MyProductEntity[] | string> {
+    const product = await this.myProductRepo.find();
+    if (product.length === 0) {
+      return 'No product Available';
+    }
+    return product;
+  }
+
+  //12.----------------------------------cancel order
+  async cancelOrder(productName: string): Promise<string> {
+    const myProduct = await this.myProductRepo.findOne({
+      where: { name: productName },
+    });
+    if (!myProduct) {
+      throw new NotFoundException(
+        `You haven't ordered the product ${productName}`,
+      );
+    }
+
+    const allProduct = await this.allProductRepo.findOne({
+      where: { name: productName },
+    });
+    if (!allProduct) {
+      throw new NotFoundException(
+        `Product ${productName} not found in the inventory to return`,
+      );
+    }
+    allProduct.quantity += myProduct.quantity;
+
+    await Promise.all([
+      this.myProductRepo.remove(myProduct),
+      this.allProductRepo.save(allProduct),
+    ]);
+
+    return `Order for ${productName} has been successfully canceled.`;
   }
 }

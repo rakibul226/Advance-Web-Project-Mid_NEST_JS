@@ -20,7 +20,12 @@ import {
   borrowBookDTO,
   registrationDTO,
 } from './DTO/resident.dto';
-import { BookEntity, MyBookEntity } from './ENTITY/resident.entity';
+import {
+  AllProductEntity,
+  BookEntity,
+  MyBookEntity,
+  MyProductEntity,
+} from './ENTITY/resident.entity';
 
 @Controller('user')
 export class residentController {
@@ -47,7 +52,7 @@ export class residentController {
 
   //3---------------------------------buy book
   @Post('/borrow-book')
-  async borrowBook(@Body() borrowBookDTO: borrowBookDTO): Promise<BookEntity> {
+  async borrowBook(@Body() borrowBookDTO: borrowBookDTO): Promise<string> {
     return this.residentService.borrowBook(borrowBookDTO.bookName);
   }
 
@@ -70,13 +75,11 @@ export class residentController {
     return await this.residentService.viewMyBooks();
   }
 
-  //6.--------------------------------Delete borrowed book
+  //7.--------------------------------Delete borrowed book
   @Delete('/delete/:name')
-  async deleteBookByName(
-    @Param('name') name: string,
-  ): Promise<{ message: string }> {
+  async deleteBookByName(@Param('name') name: string): Promise<string> {
     const message = await this.residentService.deleteBookByName(name);
-    return { message };
+    return message;
   }
 
   //8.---------------------------------buy product
@@ -86,7 +89,7 @@ export class residentController {
   }
 
   //9.---------------------------------update product
-  @Put('updateProduct')
+  @Put('/updateQuantity')
   async updateProduct(
     @Body(ValidationPipe) updateProductDto: UpdateProductDTO,
   ) {
@@ -95,4 +98,24 @@ export class residentController {
       updateProductDto.quantity,
     );
   }
+
+  //10.---------------------------------view all product
+  @Get('/view-all-product')
+  async viewAllProduct(): Promise<AllProductEntity[] | string> {
+    return await this.residentService.viewAllProduct();
+  }
+
+  //11.---------------------------------view bought product
+  @Get('/viewBoughtProduct')
+  async viewBoughtProduct(): Promise<MyProductEntity[] | string> {
+    return await this.residentService.viewBoughtProduct();
+  }
+
+  //12.----------------------------------cancel order
+  @Delete('/cancel-order/:name')
+  async cancelOrder(@Param('name') name: string): Promise<string> {
+    return this.residentService.cancelOrder(name);
+  }
+
+  //13.-----------------------------------upload profile pic
 }

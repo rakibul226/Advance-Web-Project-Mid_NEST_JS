@@ -27,11 +27,6 @@ export class registrationDTO {
 
   @Matches(/^[0-9]+$/, { message: 'Phone number must contain only numbers' })
   phone: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @IsIn(['admin', 'resident', 'librarian', 'manager'])
-  role: string;
 }
 
 // ------------------------------------Login DTO
@@ -77,5 +72,6 @@ export class UpdateProductDTO {
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(1)
   quantity: number;
 }
