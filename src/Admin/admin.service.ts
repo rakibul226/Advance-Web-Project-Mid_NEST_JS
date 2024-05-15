@@ -44,7 +44,7 @@ export class AdminService {
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }
-    return user;
+    return null;
   } 
 
   // get all residents
@@ -89,12 +89,22 @@ export class AdminService {
     return await this.adminRepo.save(myobj);
   }
 
+  // delete event by id
+  deleteEventById(id: number): object {
+    return this.adminRepo.delete({id: id})
+  }
+
   // announcement
   async addPost(adminId: string, post: AdminAnnouncedPostEntity): Promise<AdminAnnouncedPostEntity> {
     console.log(adminId);
     const admin = await this.adminRegistrationRepo.findOneBy({adminId: adminId});
     post.admin = admin;
     return this.adminAnnouncedPostRepo.save(post);
+  }
+
+  // delete posts by id
+  deletePostById(id: number): object {
+    return this.adminAnnouncedPostRepo.delete({id: id})
   }
 
   // get all events
@@ -105,5 +115,20 @@ export class AdminService {
   // get all announcements
   async getAllPosts(): Promise<AdminAnnouncedPostEntity[]> {
     return this.adminAnnouncedPostRepo.find();
+  }
+
+  // get resident by id
+  async getUserById(id: number): Promise<object> {
+    return await this.residentRepo.findOne({where:{id}});
+  }
+
+  // get admin by id
+  async getAdminById(adminId: string): Promise<object> {
+    return await this.adminRegistrationRepo.findOneBy({ adminId });
+  }
+
+  // get event by id
+  async getEventById(id: number): Promise<object> {
+    return await this.adminRepo.findOne({where:{id}});
   }
 }

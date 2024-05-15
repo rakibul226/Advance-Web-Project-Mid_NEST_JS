@@ -39,11 +39,11 @@ export class AdminController {
     return this.adminService.getAllUsers();
   }
 
-  // get resident by email
+  /* // get resident by email
   @Get('getresident/:email')
   getUserByEmail(@Param('email') email: string): object {
     return this.adminService.getUserByEmail(email);
-  }
+  } */
 
   // delete resident by id
   @Delete('deleteresident/:id')
@@ -59,12 +59,12 @@ export class AdminController {
   }
 
 
-  // get resident by partial match(Search by name)
+  /* // get resident by partial match(Search by name)
   @Get('getresidentsbyname/:name')
   getUsersByName(@Param('name') name: string){
       return this.adminService.getUsersByName(name);
   }
-
+ */
   // add resident
   @Post('/addresident')
   @UsePipes(ValidationPipe)
@@ -98,12 +98,24 @@ export class AdminController {
         return this.adminService.addEvent(myobj);
     }
 
+    // delete local event
+  @Delete('deleteevent/:id')
+  deleteEventById(@Param('id', ParseIntPipe) id: number): object {
+    return this.adminService.deleteEventById(id);
+  }
+
     // post comments
     @Post('addpost/:adminid')
     async addpost(@Param('adminid') adminid: string, @Body() myobj: AdminAnnouncedPostEntity,): Promise<AdminAnnouncedPostEntity> {
 
         return this.adminService.addPost(adminid, myobj);
     }
+
+    // delete posts
+  @Delete('deletepost/:id')
+  deletePostById(@Param('id', ParseIntPipe) id: number): object {
+    return this.adminService.deletePostById(id);
+  }
 
     // view admin posted event
     @Get('viewevents')
@@ -112,8 +124,26 @@ export class AdminController {
     }
 
     // view admin posted announcements
-    @Get('viewannouncements')
+    @Get('viewblogs')
     getAllPosts(): Promise<AdminAnnouncedPostEntity[]> {
       return this.adminService.getAllPosts();
     }
+
+    // get resident by id
+  @Get('getresidentbyid/:id')
+  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<object> {
+    return this.adminService.getUserById(id);
+  }
+
+  /* // get admin by id
+  @Get('getadminbyid/:id')
+  async getAdminById(@Param('id') adminId: string): Promise<object> {
+    return this.adminService.getAdminById(adminId);
+  } */
+
+  // get event by id
+  @Get('geteventbyid/:id')
+  async getEventById(@Param('id', ParseIntPipe) id: number): Promise<object> {
+    return this.adminService.getEventById(id);
+  }
 }

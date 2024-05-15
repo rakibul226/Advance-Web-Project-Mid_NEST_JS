@@ -8,6 +8,8 @@ import { ProductmanagerModule } from './product_manager/Productmanager.module';
 import { LibraryModule } from './librarymanager/library/library.module';
 import { BookModule } from './librarymanager/Book_Manager/book.module';
 import { ProductModule } from './product_manager/Products/Products.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 // import { mailModule } from './Resident/Mail/mail.module';
 // import { LibraryModule } from './librarymanager/library/library.module';
 // import { BookModule } from './librarymanager/Book_Manager/book.module';
@@ -28,6 +30,9 @@ import { ProductModule } from './product_manager/Products/Products.module';
       database: 'ever_neighbor', //Change to your database name
       autoLoadEntities: true,
       synchronize: true,
+    }),ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'upload'), // Path to your upload directory
+      serveRoot: '/uploads', // Base URL from which to serve the static files
     }),
     BookModule,ProductModule,
   ],
