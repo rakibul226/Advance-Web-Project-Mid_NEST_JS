@@ -79,7 +79,7 @@ import { NotFoundException } from '@nestjs/common';
         },
       });
   
-      const totalSales = sales.reduce((total, sale) => total + sale.amount, 0);
+      const totalSales = sales.reduce((total, sale) => total + sale.quantity, 0);
   
       return {
         totalSales,

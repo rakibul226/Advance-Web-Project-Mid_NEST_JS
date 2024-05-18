@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn,OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,OneToMany,CreateDateColumn } from 'typeorm';
 import { CommentEntity } from './Comment.entity';
 
 @Entity('Productpicture')
@@ -38,13 +38,17 @@ export class SaleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  amount: number;
-
-  @Column()
+  @CreateDateColumn()
   date: Date;
 
-  // Other relevant fields like productId, quantity, etc.
+  @Column()
+  productName: string;
+
+  @Column()
+  quantity: number;
+
+  @Column()
+  totalPrice: number;
 }
 
 
